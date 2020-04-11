@@ -1,23 +1,91 @@
 <?php
 namespace MyCampus\Repository;
+
 use  MyCampus\Model\Campus;
+use  MyCampus\Factory\CampusFactory;
 
 
-class CampusRepository
+/**
+ * Class CampusRepository
+ * @package MyCampus\Repository
+ */
+class CampusRepository implements CampusRepositoryInterface
 {
+
     const SAVE_PATH = './files/campus';
-    public function getAll(){
 
+    /**
+     * @var InternalSalaryRepository
+     */
+    private $internalSalaryRepository;
+    /**
+     * @var \MyCampus\Observable\InternalTeacherSalary
+     */
+    private $internalSalaryObservableObject;
+
+    /**
+     * CampusRepository constructor.
+     * @param InternalSalaryRepositoryInterface $internalSalaryRepository
+     */
+    public function __construct(InternalSalaryRepositoryInterface $internalSalaryRepository)
+    {
+        $this->internalSalaryRepository = $internalSalaryRepository;
+        $this->internalSalaryObservableObject = $this->internalSalaryRepository->getObservableObject();
     }
 
-    public function getOne(string $ville,string $region){
 
+    /**
+     * @return array
+     */
+    public function getAll():array
+    {
+        $campusCollection = [];
+        $filesCampus =  array_diff(scandir(self::SAVE_PATH), array('..', '.', '.keep'));
+        foreach($filesCampus as $fileCampus){
+            $campusJson = file_get_contents(self::SAVE_PATH.DIRECTORY_SEPARATOR.$fileCampus);
+            $campusFactory = new CampusFactory($this->internalSalaryObservableObject);
+            $campusCollection[] = $campusFactory->buildFromJson(json_decode($campusJson));
+        }
+
+        return $campusCollection;
     }
 
-    public static function save(Campus $campus){
+    /**
+     * @param $salary
+     */
+    public function updateAllInternalTeachersSalary(int $salary)
+    {
+        //trigger event in order to update
+        $this->internalSalaryObservableObject->updateInternalTeacherSalary($salary);
+        $this->internalSalaryRepository->updateInternalSalary($salary);
+    }
+
+    /**
+     * @param string $city
+     * @param string $region
+     * @return Campus||null
+     */
+    public function getOne(string $city, string $region):?Campus
+    {
+        $fileHash =  hash( 'sha256' , strtolower($city.$region));
+        if(file_exists(self::SAVE_PATH.DIRECTORY_SEPARATOR.$fileHash.'.json')){
+            $campusJson = file_get_contents(self::SAVE_PATH.DIRECTORY_SEPARATOR.$fileHash.'.json');
+            $campusFactory = new CampusFactory($this->internalSalaryObservableObject);
+            $campusFactory->buildFromJson(json_decode($campusJson));
+        }
+
+        return null;
+    }
+
+
+
+    /**
+     * @param Campus $campus
+     */
+    public function save(Campus $campus)
+    {
         $campusId = $campus->getCampusId();
         $fp = fopen(self::SAVE_PATH.DIRECTORY_SEPARATOR.$campusId.'.json', 'w+');
-        echo 'on save';
         fwrite($fp, json_encode($campus));
         fclose($fp);
     }

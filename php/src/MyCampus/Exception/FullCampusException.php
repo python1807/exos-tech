@@ -14,7 +14,7 @@ class FullCampusException extends \RuntimeException
         parent::__construct(
             sprintf(
                 "Campus '%s' maximum capacity reached",
-                $campus->getCity()
+                $campus->getCity().' '.$campus->getRegion()
             ),
             $code,
             $previous

@@ -2,6 +2,7 @@
 
 namespace  MyCampus\Model;
 
+use MyCampus\Specification\CanAddStudentRegardingStudentList;
 /**
  * Class Campus
  * @package Model
@@ -27,6 +28,9 @@ class Campus implements \JsonSerializable
         $this->capacity = $capacity;
     }
 
+    /**
+     * @return string
+     */
     public function getCampusId(){
         return hash ( 'sha256' , strtolower($this->city.$this->region));
     }
@@ -85,29 +89,56 @@ class Campus implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @param Student $s
+     */
     public function addStudent(Student $s)
     {
-        $this->students[] = $s;
+        // throw exception if capacity is reached
+        if(conut($this->students) == $this->capacity){
+            throw new FullCampusException($this);
+        }
+
+        $canAddStudentRegardingStudentList = new CanAddStudentRegardingStudentList($this->students);
+        if($canAddStudentRegardingStudentList->isSatisfiedBy($s)){
+            $this->students[] = $s;
+        }
     }
 
+    /**
+     * @param Student $s
+     * @return array
+     */
     public function removeStudent(Student $s)
     {
         if (($key = array_search($s, $this->students, true)) !== FALSE) {
             unset($this->students[$key]);
         }
+
         return $this->students;
     }
 
+    /**
+     * @return array
+     */
     public function getStudents()
     {
-        return $this->students;
+        // Sort students by id asc
+        return usort( $this->students, function($a, $b) {return strcmp($a->getId(), $b->getId());});
     }
 
+    /**
+     * @param Teacher $t
+     */
     public function addTeacher(Teacher $t)
     {
         $this->teachers[] = $t;
     }
 
+    /**
+     * @param Teacher $t
+     * @return array
+     */
     public function removeTeacher(Teacher $t)
     {
         if (($key = array_search($t, $this->teachers, true)) !== FALSE) {
@@ -116,6 +147,9 @@ class Campus implements \JsonSerializable
         return $this->teachers;
     }
 
+    /**
+     * @return array
+     */
     public function getTeachers()
     {
         return $this->teachers;
