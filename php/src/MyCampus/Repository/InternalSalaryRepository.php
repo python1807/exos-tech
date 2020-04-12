@@ -21,8 +21,9 @@ class InternalSalaryRepository implements InternalSalaryRepositoryInterface
      */
     public function getObservableObject():InternalTeacherSalary
     {
-        $internalSalaryJson =  file_get_contents(self::SAVE_FILE_PATH);
+        $internalSalaryJson =  json_decode(file_get_contents(self::SAVE_FILE_PATH));
         $internalSalaryObservable = new InternalTeacherSalary();
+
         if(isset($internalSalaryJson->salary)){
             $internalSalaryObservable->updateInternalTeacherSalary($internalSalaryJson->salary);
         }

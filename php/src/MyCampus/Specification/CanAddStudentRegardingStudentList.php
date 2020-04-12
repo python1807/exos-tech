@@ -1,13 +1,15 @@
 <?php
 namespace MyCampus\Specification;
 
+use MyCampus\Model\Student;
+
 class CanAddStudentRegardingStudentList implements CanAddStudentRegardingStudentListInterface
 {
     private $studentList;
 
     public function __construct(array $studentList)
     {
-        $this->$studentList = $studentList;
+        $this->studentList = $studentList;
     }
 
     public function isSatisfiedBy(Student $student): bool

@@ -95,4 +95,13 @@ class Student implements \JsonSerializable
             'lastName' => $this->lastName
         ];
     }
+
+    public function getCliArrray(){
+        return
+            [
+                'Id'   => $this->id,
+                'Prénom' => $this->firstName,
+                'Nom' => $this->lastName
+            ];
+    }
 }

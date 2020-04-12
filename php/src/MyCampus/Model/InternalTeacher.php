@@ -73,4 +73,15 @@ class InternalTeacher extends Teacher implements \SplObserver, \JsonSerializable
             'type' => 'internal'
         ];
     }
+
+    public function getCliArrray(){
+        return
+        [
+            'Id'   => $this->id,
+            'Prénom' => $this->firstName,
+            'Nom' => $this->lastName,
+            'Type' => 'interne',
+            'Salaire' => $this->salary
+        ];
+    }
 }

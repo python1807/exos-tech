@@ -3,6 +3,7 @@
 namespace  MyCampus\Model;
 
 use MyCampus\Specification\CanAddStudentRegardingStudentList;
+use MyCampus\Exception\FullCampusException;
 /**
  * Class Campus
  * @package Model
@@ -95,7 +96,7 @@ class Campus implements \JsonSerializable
     public function addStudent(Student $s)
     {
         // throw exception if capacity is reached
-        if(conut($this->students) == $this->capacity){
+        if(count($this->students) == $this->capacity){
             throw new FullCampusException($this);
         }
 
@@ -111,7 +112,7 @@ class Campus implements \JsonSerializable
      */
     public function removeStudent(Student $s)
     {
-        if (($key = array_search($s, $this->students, true)) !== FALSE) {
+        if (($key = array_search($s, $this->students)) !== FALSE) {
             unset($this->students[$key]);
         }
 
@@ -124,7 +125,8 @@ class Campus implements \JsonSerializable
     public function getStudents()
     {
         // Sort students by id asc
-        return usort( $this->students, function($a, $b) {return strcmp($a->getId(), $b->getId());});
+        usort( $this->students, function($a, $b) {return strcmp($a->getId(), $b->getId());});
+        return $this->students;
     }
 
     /**
@@ -141,7 +143,7 @@ class Campus implements \JsonSerializable
      */
     public function removeTeacher(Teacher $t)
     {
-        if (($key = array_search($t, $this->teachers, true)) !== FALSE) {
+        if (($key = array_search($t, $this->teachers)) !== FALSE) {
             unset($this->teachers[$key]);
         }
         return $this->teachers;
@@ -172,6 +174,15 @@ class Campus implements \JsonSerializable
             'capacity' => $this->capacity,
             'teachers' => $this->teachers,
             'students' => $this->students
+        ];
+    }
+
+    public function getCliArrray(){
+        return
+        [
+            'Ville'   => $this->city,
+            'Région' => $this->region,
+            'Capacité' => $this->capacity
         ];
     }
 }

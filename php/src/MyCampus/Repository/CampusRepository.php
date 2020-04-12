@@ -68,10 +68,11 @@ class CampusRepository implements CampusRepositoryInterface
     public function getOne(string $city, string $region):?Campus
     {
         $fileHash =  hash( 'sha256' , strtolower($city.$region));
+
         if(file_exists(self::SAVE_PATH.DIRECTORY_SEPARATOR.$fileHash.'.json')){
             $campusJson = file_get_contents(self::SAVE_PATH.DIRECTORY_SEPARATOR.$fileHash.'.json');
             $campusFactory = new CampusFactory($this->internalSalaryObservableObject);
-            $campusFactory->buildFromJson(json_decode($campusJson));
+            return $campusFactory->buildFromJson(json_decode($campusJson));
         }
 
         return null;
@@ -82,11 +83,32 @@ class CampusRepository implements CampusRepositoryInterface
     /**
      * @param Campus $campus
      */
-    public function save(Campus $campus)
+    public function save(Campus $campus, $isUpdate = false)
     {
         $campusId = $campus->getCampusId();
-        $fp = fopen(self::SAVE_PATH.DIRECTORY_SEPARATOR.$campusId.'.json', 'w+');
-        fwrite($fp, json_encode($campus));
-        fclose($fp);
+
+        //if campus does not exist. We save it
+        if(!file_exists(self::SAVE_PATH.DIRECTORY_SEPARATOR.$campusId.'.json') || $isUpdate == true){
+            $fp = fopen(self::SAVE_PATH.DIRECTORY_SEPARATOR.$campusId.'.json', 'w');
+            fwrite($fp, json_encode($campus));
+            fclose($fp);
+            return true;
+        } else {
+            // else we do nothing to preserve current data
+            return false;
+        }
+
+    }
+
+
+    /**
+     * @param Campus $campus
+     */
+    public function delete(Campus $campus)
+    {
+        $campusId = $campus->getCampusId();
+        if(file_exists(self::SAVE_PATH.DIRECTORY_SEPARATOR.$campusId.'.json')){
+            unlink(self::SAVE_PATH.DIRECTORY_SEPARATOR.$campusId.'.json');
+        }
     }
 }

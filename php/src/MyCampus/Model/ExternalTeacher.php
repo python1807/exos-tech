@@ -54,4 +54,15 @@ class ExternalTeacher extends Teacher implements \JsonSerializable
             ];
     }
 
+    public function getCliArrray(){
+        return
+            [
+                'Id'   => $this->id,
+                'Prénom' => $this->firstName,
+                'Nom' => $this->lastName,
+                'Type' => 'externe',
+                'Salaire' => $this->salary
+            ];
+    }
+
 }
