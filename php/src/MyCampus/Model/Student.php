@@ -8,7 +8,7 @@ namespace MyCampus\Model;
  */
 class Student implements \JsonSerializable
 {
-    private $id = 0;
+    private $id;
     private $firstName;
     private $lastName;
 
@@ -53,7 +53,7 @@ class Student implements \JsonSerializable
 
     /**
      * @param string $firstName
-     * @return Campus
+     * @return Student
      */
     public function setFirstName(string $firstName):Student
     {
@@ -71,7 +71,7 @@ class Student implements \JsonSerializable
 
     /**
      * @param string $lastName
-     * @return Campus
+     * @return Student
      */
     public function setLastName(string $lastName):Student
     {
