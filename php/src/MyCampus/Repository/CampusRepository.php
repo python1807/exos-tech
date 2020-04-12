@@ -87,7 +87,7 @@ class CampusRepository implements CampusRepositoryInterface
     {
         $campusId = $campus->getCampusId();
 
-        //if campus does not exist. We save it
+        //if campus does not exist or if its update. We save it
         if(!file_exists(self::SAVE_PATH.DIRECTORY_SEPARATOR.$campusId.'.json') || $isUpdate == true){
             $fp = fopen(self::SAVE_PATH.DIRECTORY_SEPARATOR.$campusId.'.json', 'w');
             fwrite($fp, json_encode($campus));
