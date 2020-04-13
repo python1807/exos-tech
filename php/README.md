@@ -9,7 +9,7 @@ INFOMANIAK est une application permettant de gérer une collection de campus ain
 ```bash
 composer install
 ```
-- Avoir PHP CLI installé
+- Avoir PHP 7 CLI installé
 
 ## Usage (liste des commandes)
 - Lister tous les campus
