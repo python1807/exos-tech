@@ -9,7 +9,7 @@ INFOMANIAK est une application permettant de gérer une collection de campus ain
 ```bash
 composer install
 ```
-- Avoir PHP CLI installé
+- Avoir PHP 7 CLI installé
 
 ## Usage (liste des commandes)
 - Lister tous les campus
@@ -35,7 +35,7 @@ php index.php -a delete_campus -c Montpellier -r Occitanie
 - Ajouter un étudiant à un campus
 
 ```bash
-php index.php -a add_student -c Montpellier -r Occitanie -id 4 -fn pierre -ln flipo
+php index.php -a add_student -c Montpellier -r Occitanie -id 1 -fn pierre -ln flipo
 ```
 - Supprimer un étudiant d'un campus
 
