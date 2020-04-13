@@ -104,7 +104,7 @@ switch ($action){
             } else {
                 $teacher = new ExternalTeacher($id, $firstname, $lastname, $salary);
             }
-            if($action == 'add_student') {
+            if($action == 'add_teacher') {
                 $campus->addTeacher($teacher);
             } else {
                 $campus->removeTeacher($teacher);
@@ -125,8 +125,11 @@ switch ($action){
         if(!empty($campus)) {
             $campusRepository->delete($campus);
             $allCampus = $campusRepository->getAll();
+            DisplayUtil::displayListOfCampus($allCampus, $climate);
+        } else {
+            $climate->bold()->red('Impossible de trouver le campus.');
         }
-        DisplayUtil::displayListOfCampus($allCampus, $climate);
+
         break;
     case 'update_internal_salary':
         ArgumentUtil::addInternalSalaryArgument($climate);

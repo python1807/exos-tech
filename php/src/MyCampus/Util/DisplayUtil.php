@@ -28,7 +28,7 @@ class DisplayUtil
      * @param Campus $campus
      * @param $climate
      */
-    public static function displayOneCampus(Campus $campus, $climate)
+    public static function displayOneCampus(?Campus $campus, $climate)
     {
         if(!empty($campus)) {
             $climate->bold('Infos campus ' . $campus->getCity() . '/' . $campus->getRegion());
