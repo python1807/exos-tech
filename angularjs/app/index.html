@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>My Weather App</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="lib/html5-boilerplate/dist/css/normalize.css">
+  <link rel="stylesheet" href="lib/html5-boilerplate/dist/css/main.css">
+  <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="lib/weather-icons/css/weather-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="app.css">
+  <script src="lib/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+<body ng-controller="baseController">
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+  <a class="navbar-brand">My weather widgets</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" ng-class="{active: !modifyingSettings}">
+        <a class="nav-link" href="#" ng-click="hideSettings()">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item" ng-class="{active: modifyingSettings}">
+        <a class="nav-link" href="#" ng-click="showSettings()">Settings</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main role="main" class="container">
+  <div id="widgets" class="container" ng-hide="modifyingSettings" ng-controller="widgetsController">
+    <div class="row" >
+      <div class="col-md-12" ng-hide="cities.length">
+        <p class="h4 text-center">No city to display. Please add some in settings...</p>
+      </div>
+      <div class="col-md-4" ng-repeat="(key, city) in cities">
+        <div class="card bg-light mb-3" style="max-width: 18rem;">
+          <div class="card-header">
+            Weather for {{city.name.toUpperCase()}}
+            <a href="#" class="card-text float-right" ng-click="refreshWidget(key, city)"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title h2"><i class="wi {{city.class}}"></i>&nbsp;{{city.weather.main.temp}} °C</h5>
+            <p class="card-text">{{city.weather.weather[0].description}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="settings" class="container" ng-show="modifyingSettings" ng-controller="cityManagementController">
+    <div class="row">
+
+      <form ng-submit="submit()"  class="form-inline mb-3">
+        <input class="form-control" type="text" ng-model="cityName" name="city-name" />
+        <!--<input type="submit" id="submit" />-->
+        <input class="btn btn-primary ml-1" type="submit" value="ADD NEW CITY">
+      </form>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        <table class="table table-hover">
+          <thead>
+          <tr >
+            <th scope="col">#</th>
+            <th scope="col">City</th>
+            <th scope="col">Temperature</th>
+            <th scope="col">Description</th>
+            <th scope="col">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="(key, city) in cities">
+            <th scope="row">{{key}}</th>
+            <td>{{city.name}}</td>
+            <td>{{city.weather.main.temp}}</td>
+            <td>{{city.weather.weather[0].description}}</td>
+            <td><button type="button" class="btn btn-danger" ng-click="deleteCity(key)">Delete</button></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+
+
+
+
+
+
+
+  <!--[if lt IE  7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+
+
+
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  -->
+  <script src="lib/angular/angular.js"></script>
+  <script src="lib/angular-resource/angular-resource.min.js"></script>
+  <script src="app.js"></script>
+  <script src="core/version/version.js"></script>
+  <script src="core/version/version-directive.js"></script>
+  <script src="core/version/interpolate-filter.js"></script>
+</body>
+</html>
