@@ -34,10 +34,12 @@ $action = $climate->arguments->get('action');
 
 switch ($action){
     case 'list_campus':
+        //return a console display of all campus
         $allCampus = $campusRepository->getAll();
         DisplayUtil::displayListOfCampus($allCampus, $climate);
         break;
     case 'get_campus':
+        //return a console display of one campus with students, teachers details
         ArgumentUtil::getCampusArguments($climate);
         $climate->arguments->parse();
         $city = $climate->arguments->get('city');
@@ -46,6 +48,7 @@ switch ($action){
         DisplayUtil::displayOneCampus($campus, $climate);
         break;
     case 'add_campus':
+        //add a new campus to collection, save it and display list of all campus
         ArgumentUtil::addCampusArguments($climate);
         $climate->arguments->parse();
         $city = $climate->arguments->get('city');
@@ -63,6 +66,7 @@ switch ($action){
         break;
     case 'add_student':
     case 'remove_student':
+        //add or remove a student from a campus, save it and display the campus details
         ArgumentUtil::addStudentArguments($climate);
         $climate->arguments->parse();
         $city = $climate->arguments->get('city');
@@ -87,6 +91,7 @@ switch ($action){
         break;
     case 'add_teacher':
     case 'remove_teacher':
+        //add or remove a teacher from a campus, save it and display the campus details
         ArgumentUtil::addTeacherArguments($climate);
         $climate->arguments->parse();
         $city = $climate->arguments->get('city');
@@ -117,6 +122,7 @@ switch ($action){
         }
         break;
     case 'delete_campus':
+        //delete a campus, save change, display list of all campus
         ArgumentUtil::getCampusArguments($climate);
         $climate->arguments->parse();
         $city = $climate->arguments->get('city');
@@ -129,9 +135,9 @@ switch ($action){
         } else {
             $climate->bold()->red('Impossible de trouver le campus.');
         }
-
         break;
     case 'update_internal_salary':
+        // update all teachers internal salary
         ArgumentUtil::addInternalSalaryArgument($climate);
         $climate->arguments->parse();
         $salary = $climate->arguments->get('salary') ?? 0;

@@ -3,6 +3,7 @@
 // Declare app level module which depends on views, and core components
 let myApp =  angular.module('myApp', ['ngResource']);
 
+//Values to link api with weather icons
 myApp.value('iconclass', {
     '01d': 'wi-day-sunny',
     '01n': 'wi-night-clear',
@@ -25,7 +26,7 @@ myApp.value('iconclass', {
 
 });
 
-
+//factory to manage weather api calls
 myApp.factory('weatherApi', ['$resource', function($resource) {
     let apiKey = '42380653e98ffa9e543872a7de1db1a2';
     let apiBaseUrl = 'http://api.openweathermap.org/data/2.5/weather';
@@ -43,10 +44,11 @@ myApp.factory('weatherApi', ['$resource', function($resource) {
                 method: 'GET'
             }
         }
-    )
+    );
 
 }]);
 
+//baseController to control main div
 myApp.controller('baseController', ['$scope', function ($scope){
     $scope.modifyingSettings = false;
     $scope.cities = [];
@@ -58,6 +60,7 @@ myApp.controller('baseController', ['$scope', function ($scope){
     };
 }]);
 
+//widgetsController to control widget elements
 myApp.controller('widgetsController', ['$scope', 'weatherApi', 'iconclass', function ($scope, weatherApi, iconclass){
     $scope.refreshWidget = function(key, city) {
         weatherApi.getCurrentWeather({location: city.name}).$promise
@@ -73,7 +76,7 @@ myApp.controller('widgetsController', ['$scope', 'weatherApi', 'iconclass', func
 
 }]);
 
-
+//cityManagementController to control cityMamnagement elements
 myApp.controller('cityManagementController', ['$scope', 'weatherApi', 'iconclass', function ($scope, weatherApi, iconclass){
     $scope.city = {};
 
@@ -98,7 +101,7 @@ myApp.controller('cityManagementController', ['$scope', 'weatherApi', 'iconclass
 
     $scope.deleteCity = function(key){
         $scope.cities.splice(key, 1);
-    }
+    };
 }]);
 
 
